@@ -14,7 +14,7 @@ module {{ module.vpr_model }} #(
     ,output reg [0:0] out
     );
 
-    logic [(2**WIDTH) - 1:0] data = LUT; // initial TODO: check if works
+    wire [(2**WIDTH) - 1:0] data = LUT; // initial TODO: check if works
     // should work in sim but not sure if it is synthesizable
     // PRGA allows for nets to be multiply driven
 

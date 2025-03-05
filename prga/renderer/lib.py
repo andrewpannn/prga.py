@@ -89,7 +89,7 @@ class BuiltinCellLibrary(object):
 
     @classmethod
     def _install_m_luts(cls, context):
-        for i in range(2, 9):
+        for i in range(2, 9): ## TODO: Why this iterator?
             name = "lut" + str(i)
 
             # abstract
@@ -596,6 +596,7 @@ class BuiltinCellLibrary(object):
         conn = NetUtils.get_connection(ff.pins["Q"], mode.ports["out"][0])
         conn.prog_enable = ProgDataValue(0, (36, 1))
 
+    ## TODO Reference
     @classmethod
     def _install_m_grady18(cls, context):
         # register a abstract-only multi-mode primitive: "grady18.ble5"
