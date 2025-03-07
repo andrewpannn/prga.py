@@ -19,8 +19,8 @@ _reprog_memory_mode = re.compile("^\d+[TGMKx]\d+b$")
 @classmethod
 def _install_m_lutram(cls, context):
     ubdr = context.build_multimode(
-        "lutram",
-        abstract_only = True)
+        "lutram6",
+        abstract_only = True) # TODO: remove
     ubdr.create_clock("clk")
     ubdr.create_input("in", 6)
     ubdr.create_input("wr_addr", 6)
@@ -49,3 +49,9 @@ def _install_m_lutram(cls, context):
 # 3. Check if lut6 mode looks ok?
 # 4. where is context.primitives map defined?
 # 5. How does this interact with abstract view file?
+
+# testing steps
+# 1 test behavioral rtl
+# 2 post syn sim
+# 3 post par sim - goal for spring break
+# 4 post implementation sim
