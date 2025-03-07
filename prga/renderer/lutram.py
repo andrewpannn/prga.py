@@ -18,9 +18,9 @@ _reprog_memory_mode = re.compile("^\d+[TGMKx]\d+b$")
 # separate file, will merge to lib.py
 @classmethod
 def _install_m_lutram(cls, context):
-    ubdr = context.build_multimode(
-        "lutram6",
-        abstract_only = True) # TODO: remove
+
+    # multimode wrapper
+    ubdr = context.build_multimode("lutram6")
     ubdr.create_clock("clk")
     ubdr.create_input("in", 6)
     ubdr.create_input("wr_addr", 6)
@@ -37,8 +37,20 @@ def _install_m_lutram(cls, context):
         mode.connect(mode.ports["in"], lut.pins["in"])
         mode.connect(lut.pins["out"], mode.ports["out"])
         mode.commit()
+    
+    # mode (2): 64 x 1 ram
+    # TODO: need to change to multimode ram?
+    if True:
+        mode = ubdr.build_mode("ram6")
+        ram = mode.instantiate ( cls.create_memory( cls, context, addr_width = 6, data_width = 1), "i_ram" )
+        mode.connect(mode.ports["in"], ram.pins["raddr"])
+        mode.connect(mode.ports["wr_addr"], ram.pins["waddr"])
+        mode.connect(mode.ports["wr_en"], ram.pins["we"])
+        mode.connect(mode.ports["d_in"], ram.pins["din"])
+        mode.connect(ram.pins["dout"], mode.ports["out"])
+        mode.commit()
 
-    lutram = ubdr.commit()
+    lutram6 = ubdr.commit()
 
 
 # def _install_lutram():
