@@ -19,7 +19,7 @@ _reprog_memory_mode = re.compile("^\d+[TGMKx]\d+b$")
 @classmethod
 def _install_m_lutram(cls, context):
 
-    # multimode wrapper
+    # multimode wrapper - LUTRAM6
     ubdr = context.build_multimode("lutram6")
     ubdr.create_clock("clk")
     ubdr.create_input("in", 6)
@@ -30,6 +30,7 @@ def _install_m_lutram(cls, context):
 
     # mode (1): lut6
     if True:
+        # TODO: do i need a unique identifier?
         mode = ubdr.build_mode("lut6")
         # TODO: context.primitives is a map. where is this stored?
         lut = mode.instantiate(context.primitives["lut6"], "i_lut6")
@@ -39,10 +40,9 @@ def _install_m_lutram(cls, context):
         mode.commit()
     
     # mode (2): 64 x 1 ram
-    # TODO: need to change to multimode ram?
     if True:
         mode = ubdr.build_mode("ram6")
-        ram = mode.instantiate ( cls.create_memory( cls, context, addr_width = 6, data_width = 1), "i_ram" )
+        ram = mode.instantiate( cls.create_memory( cls, context, addr_width = 6, data_width = 1), "i_ram" )
         mode.connect(mode.ports["in"], ram.pins["raddr"])
         mode.connect(mode.ports["wr_addr"], ram.pins["waddr"])
         mode.connect(mode.ports["wr_en"], ram.pins["we"])
@@ -51,6 +51,38 @@ def _install_m_lutram(cls, context):
         mode.commit()
 
     lutram6 = ubdr.commit()
+
+    # multimode wrapper - LUTRAM4
+    ubdr = context.build_multimode("lutram4")
+    ubdr.create_clock("clk")
+    ubdr.create_input("in", 4)
+    ubdr.create_input("wr_addr", 4)
+    ubdr.create_input("wr_en", 1)
+    ubdr.create_input("d_in", 1)
+    ubdr.create_output("out", 1)
+
+    # mode (1): lut6
+    if True:
+        mode = ubdr.build_mode("lut4")
+        # TODO: context.primitives is a map. where is this stored?
+        lut = mode.instantiate(context.primitives["lut4"], "i_lut4")
+        # connect(source, sink)
+        mode.connect(mode.ports["in"], lut.pins["in"])
+        mode.connect(lut.pins["out"], mode.ports["out"])
+        mode.commit()
+    
+    # mode (2): 16 x 1 ram
+    if True:
+        mode = ubdr.build_mode("ram4")
+        ram = mode.instantiate( cls.create_memory( cls, context, addr_width = 4, data_width = 1), "i_ram" )
+        mode.connect(mode.ports["in"], ram.pins["raddr"])
+        mode.connect(mode.ports["wr_addr"], ram.pins["waddr"])
+        mode.connect(mode.ports["wr_en"], ram.pins["we"])
+        mode.connect(mode.ports["d_in"], ram.pins["din"])
+        mode.connect(ram.pins["dout"], mode.ports["out"])
+        mode.commit()
+
+    lutram4 = ubdr.commit()
 
 
 # def _install_lutram():
